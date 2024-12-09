@@ -1,26 +1,33 @@
-const express = require("express");
-const app = express ();
-const port = 3000;
-const bodyParser = require('body-parser');
+const express = require('express');
+const http = require('http');
+const socketIo = require('socket.io');
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended:true}))
+const app = express();
+const server = http.createServer(app);
 
-app.post('/submit', (req, res) => {
-    console.log(req.body)
-    const request = req.body
-    const response = {
-        status: 'success',
-        message: 'JSON ricevuto',
-        data: request
-    };
-    res.json(response);
+const io = socketIo(server,{
+    cors: {
+        origin:'*',
+    }
 });
 
-app.get("/", (req,res) => {
-    res.sendFile(__dirname +"/index.html");
+io.on('connection', socket =>{
+    console.log('client connesso')
+
+    socket.on('disconnect', (data) => {
+        console.log('client disconnesso');
+    });
+
+    socket.on('sendMessage', (data) => {
+        console.log(`messaggio ricevuto: ${data}`);
+        io.emit('message', data);
+    });
+
 });
 
-app.listen(port, () => {
-    console.log("Server in ascolto sulla porta " + "//localhost:"+port)
-})
+const PORT = process.env.PORT || 3000;
+server.listen(PORT,'10.1.0.6', () => {
+    console.log(`server in ascolto alla porta: ${PORT}`);
+});
+
+

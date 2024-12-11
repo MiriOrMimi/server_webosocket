@@ -21,9 +21,14 @@ io.on('connection', socket =>{
     socket.on('sendMessage', (data) => {
         console.log(`messaggio ricevuto: ${data}`);
         io.emit('message', data);
+        io.to("http://10.1.0.5:3000").emit("sendMessage", data)
     });
 
+    
+
 });
+
+
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT,'10.1.0.6', () => {

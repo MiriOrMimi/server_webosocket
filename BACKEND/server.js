@@ -21,7 +21,7 @@ io.on('connection', socket =>{
     socket.on('sendMessage', (data) => {
         console.log(`messaggio ricevuto: ${data}`);
         io.emit('message', data);
-        io.to("http://10.1.0.5:3000").emit("sendMessage", data)
+        io.to("http://10.1.0.6:3000").emit("sendMessage", data)
     });
 
     

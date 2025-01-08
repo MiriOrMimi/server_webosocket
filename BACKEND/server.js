@@ -18,11 +18,16 @@ io.on('connection', socket =>{
         console.log('client disconnesso');
     });
 
-    socket.on('sendMessage', (data) => {
-        console.log(`messaggio ricevuto: ${data}`);
-        io.emit('message', data);
-        io.to("http://10.1.0.6:3000").emit("sendMessage", data)
-    });
+    // socket.on('sendMessage', (data) => {
+    //     console.log(`messaggio ricevuto: ${data}`);
+    //     io.emit('message', data);
+    //      io.to("http://10.1.0.5:3000").emit("sendMessage", data)
+    // });
+
+      socket.on('sendMessage', (data) => {
+        socket.broadcast.emit('message', data)
+        //socket.to(sender.id).emit('message', data); 
+    })
 
     
 

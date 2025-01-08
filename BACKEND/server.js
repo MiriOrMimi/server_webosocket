@@ -15,7 +15,7 @@ io.on('connection', socket =>{
     console.log('client connesso')
     var currenRoom = "";
 
-    socket.on('disconnect', (data) => {
+    socket.on('disconnect', (data) => { 
         console.log('client disconnesso');
     });
 

@@ -13,20 +13,31 @@ const io = socketIo(server,{
 
 io.on('connection', socket =>{
     console.log('client connesso')
+    var currenRoom = "";
 
     socket.on('disconnect', (data) => {
         console.log('client disconnesso');
     });
 
-    // socket.on('sendMessage', (data) => {
-    //     console.log(`messaggio ricevuto: ${data}`);
-    //     io.emit('message', data);
-    //      io.to("http://10.1.0.5:3000").emit("sendMessage", data)
-    // });
+    socket.on('sendMessage', (data) => {
+       switch(currenRoom){
+        case "" || "broadcast":
+            socket.broadcast.emit('message', data)
+            break;
+        default:
+            io.to(currenRoom).emit("message", data)
+       }
+    });
 
-      socket.on('sendMessage', (data) => {
-        socket.broadcast.emit('message', data)
-        //socket.to(sender.id).emit('message', data); 
+    //   socket.on('sendMessage', (data) => {
+    //     socket.broadcast.emit('message', data)
+    // })
+
+    socket.on('join-room', room =>{
+        socket.leave(currenRoom);
+        socket.join(room);
+        console.log("Connessio alla stanza "+room);
+        currenRoom = room;
     })
 
     

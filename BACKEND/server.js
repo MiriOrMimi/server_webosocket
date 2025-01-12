@@ -22,8 +22,7 @@ io.on('connection', socket =>{
     socket.on('sendMessage', (data) => {
        switch(currenRoom){
         case "" || "broadcast":
-            socket.broadcast.emit('message', data)
-            break;
+            io.to("").emit("message", data)
         default:
             io.to(currenRoom).emit("message", data)
        }
